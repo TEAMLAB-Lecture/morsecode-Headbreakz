@@ -91,9 +91,9 @@ def is_validated_english_sentence(user_input):
     check_mark_list = ['.',',','!','?']
     check_word =''
     for i in user_input :
-        if i.isalpha() or i ==' ':
+        if i.isalpha() :
             check_word += i
-        elif i in check_mark_list :
+        elif i in check_mark_list or i == ' ':
             continue
         else :
             result =False
@@ -137,8 +137,11 @@ def is_validated_morse_code(user_input):
         else :
             result = False
             break
-    if user_input not in morse_code.values():
-        result = False
+
+    copy_user_input = user_input.split(' ')
+    for j in copy_user_input :        
+        if j not in morse_code.values() and j != '' :            
+            result = False
     return result
     # ==================================
 
@@ -164,11 +167,14 @@ def get_cleaned_english_sentence(raw_english_sentence):
     # ===Modify codes below=============
     # 조건에 따라 변환되어야 할 결과를 result 변수에 할당 또는 필요에 따라 자유로운 수정
     result = ''
+    check_mark_list = ['.',',','!','?']
     for i in raw_english_sentence:
-        if i.isalpha() or i == ' ':
+        if i in check_mark_list :
+            continue
+        else :
             result += i
 
-    return result
+    return result.strip()
     # ==================================
 
 
@@ -292,12 +298,14 @@ def encoding_sentence(english_sentence):
     # 조건에 따라 변환되어야 할 결과를 result 변수에 할당 또는 필요에 따라 자유로운 수정
     copy_english_sentence = get_cleaned_english_sentence(english_sentence)
     result = ''
+    check_sentence = 0
     for i in copy_english_sentence :    
-        if i == ' ':
+        if i == ' ' and check_sentence == 0:
             result +=' '
-        else :
+            check_sentence = 1
+        elif i.isalpha() :
             result += encoding_character(i)+' '
-
+            check_sentence = 0
     return result.rstrip()
     # ==================================
 
